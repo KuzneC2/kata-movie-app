@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/kata-movie-app/static/css/main.9ce055de.css",
+    "main.js": "/kata-movie-app/static/js/main.dc49bc7c.js",
+    "index.html": "/kata-movie-app/index.html",
+    "main.9ce055de.css.map": "/kata-movie-app/static/css/main.9ce055de.css.map",
+    "main.dc49bc7c.js.map": "/kata-movie-app/static/js/main.dc49bc7c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9ce055de.css",
+    "static/js/main.dc49bc7c.js"
+  ]
+}
