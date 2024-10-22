@@ -1,0 +1,95 @@
+.movie-container {
+  display: flex;
+  max-height: 279px;
+  max-width: 451px;
+  width: 100%;
+  margin: 0 36px 36px 36px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.movie-container:nth-of-type(2n) {
+  margin-left: 0;
+}
+
+.movie-img {
+  max-width: 183px;
+  max-height: 281px;
+  margin: 0 20px 0 0;
+}
+
+.movie-title-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 10px 0 0;
+}
+
+.movie-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 28px;
+}
+
+.movie-score {
+  border-radius: 50%;
+  border: 2px solid #e9d100;
+  padding: 8px 6px;
+  width: 37px;
+  height: 37px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.movie-date {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 22px;
+  color: #827e7e;
+  margin: 7px 0 7px 0;
+}
+
+.movie-category-container {
+  display: flex;
+  margin: 0 0 7px 0;
+}
+
+.movie-category {
+  margin: 0 8px 0 0;
+  padding: 2px 3px 3px 5px;
+  background-color: #fafafa;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+
+  color: rgba(0, 0, 0, 0.65);
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  /* identical to box height */
+
+  color: rgba(0, 0, 0, 0.65);
+  max-height: 20px;
+}
+
+.movie-description {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+  height: 129px;
+  margin: 0 20px 1px 0;
+
+  font-family: 'Inter';
+  font-style: normal;
+  color: #000000;
+}
+
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-rate{
+  position: absolute;
+  bottom: 17px;
+}

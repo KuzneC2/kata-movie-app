@@ -1,0 +1,17 @@
+.movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-alert-error {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  margin: 0 0 40px 0;
+  width: 340px;
+  text-align: center;
+}
+
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-spin-spinning {
+  margin-bottom: 15px;
+}
