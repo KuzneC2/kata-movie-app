@@ -1,10 +1,14 @@
 import { Component } from 'react';
+import { format } from 'date-fns';
+import { Offline, Online } from 'react-detect-offline';
+import { debounce } from 'lodash';
+
 import { Alert, Pagination } from 'antd';
 import Header from '../Header/Header';
 import MovieList from '../MovieList/MovieList';
+
 import movieServiceApi from '../services/movies-servies';
-import { format } from 'date-fns';
-import { Offline, Online } from 'react-detect-offline';
+
 import './App.css';
 
 export default class App extends Component {
@@ -16,36 +20,55 @@ export default class App extends Component {
       error: false,
       paginateValue: 1,
       totalPages: 1,
+      searchName: `return`,
+      totalResults: 0,
     };
   }
 
   movieService = new movieServiceApi();
-
+  // первоначальный рендер стартовых фильмов
   componentDidMount() {
     this.getStartApi().catch(this.getErrorMessage); //стартовый рендер фильмов на странице
   }
+
   //Создание стейта всех фильмов для отрисовки
   getStartApi = async () => {
-    const api = await this.movieService.getResource(this.state.paginateValue);
-    const moviesData = api.results.map(movie => {
-      return {
-        id: movie.id,
-        title: movie.original_title,
-        score: movie.popularity.toFixed(1),
-        data: this.getCurDate(movie.release_date),
-        description: this.cutDescription(movie.overview, 90),
-        rate: movie.vote_average,
-        image: this.getCurImg(movie.poster_path),
-      };
-    });
+    const api = await this.movieService.getResource(
+      this.state.searchName,
+      this.state.paginateValue,
+    );
 
-    await this.setState({
-      moviesData: moviesData,
-      loading: false,
-      error: false,
-      totalPages: api.total_pages,
-    });
+    if (api.total_results < 1) {
+      this.setState({
+        loading: false,
+        error: true,
+        moviesData: [],
+        totalResults: 0,
+        totalPages: 0,
+      });
+    } else {
+      const moviesData = api.results.map(movie => {
+        return {
+          id: movie.id,
+          title: movie.original_title,
+          score: movie.vote_average.toFixed(1),
+          data: this.getCurDate(movie.release_date),
+          description: this.cutDescription(movie.overview, 90),
+          rate: null,
+          image: this.getCurImg(movie.poster_path),
+        };
+      });
+
+      await this.setState({
+        moviesData: moviesData,
+        loading: false,
+        error: false,
+        totalPages: api.total_pages,
+        totalResults: api.total_results,
+      });
+    }
   };
+
   //получение корректного изображения, если есть
   getCurImg = url => {
     if (url) {
@@ -54,6 +77,7 @@ export default class App extends Component {
       return 'https://avatars.mds.yandex.net/i?id=61ab8e93cef78436f9d0c9e1f3875f6ccdfaebcb_l-9035616-images-thumbs&n=13';
     }
   };
+
   //получение корректной даты, если она есть
   getCurDate = date => {
     if (date !== '') {
@@ -62,6 +86,7 @@ export default class App extends Component {
       return date;
     }
   };
+
   //сокращение описания к фильму
   cutDescription = (description, maxLength) => {
     if (description.length === 0) {
@@ -80,6 +105,7 @@ export default class App extends Component {
 
     return shortenedText + '...';
   };
+
   //рендер ошибки
   getErrorMessage = err => {
     console.log(err);
@@ -88,6 +114,7 @@ export default class App extends Component {
       loading: false,
     });
   };
+
   //изменение страницы
   changeNumberPage = async num => {
     await this.setState({
@@ -97,8 +124,24 @@ export default class App extends Component {
     return await this.getStartApi();
   };
 
+  //изменение в инпуте поиска + debounce
+  debounceFunk = debounce(async e => {
+    const searchValue = e.target.value;
+    await this.setState({
+      searchName: searchValue,
+      loading: true,
+    });
+  }, 500);
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.searchName !== prevState.searchName) {
+      this.getStartApi();
+    }
+  }
+
   render() {
-    const { moviesData, loading, error, paginateValue, totalPages } = this.state;
+    const { moviesData, loading, error, paginateValue, totalPages } =
+      this.state;
     return (
       <>
         <Offline>
@@ -108,7 +151,7 @@ export default class App extends Component {
           />
         </Offline>
         <Online>
-          <Header />
+          <Header changeSearchLine={this.debounceFunk} />
           <main className="main">
             <MovieList
               className="MovieList"

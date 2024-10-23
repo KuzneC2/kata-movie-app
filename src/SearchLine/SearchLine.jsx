@@ -8,6 +8,15 @@ export default class SearchLine extends Component {
   }
 
   render() {
-    return <input className="header-input" type="text" placeholder="Type to search..." />;
+    const { changeSearchLine } = this.props;
+
+    return (
+      <input
+        className="header-input"
+        type="text"
+        placeholder="Type to search..."
+        onChange={changeSearchLine}
+      />
+    );
   }
 }

@@ -17,12 +17,19 @@
   max-height: 281px;
   margin: 0 20px 0 0;
 }
+.movie-description-content {
+  width: 100%;
+  max-width: 248px;
+}
 
 .movie-title-block {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 10px 10px 0 0;
+  max-width: 238px;
+  width: 100%;
+  
 }
 
 .movie-title {
@@ -89,7 +96,7 @@
   color: #000000;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-rate{
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-rate {
   position: absolute;
   bottom: 17px;
 }

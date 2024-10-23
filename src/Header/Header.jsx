@@ -8,10 +8,11 @@ export default class Header extends Component {
     super();
   }
   render() {
+    const {changeSearchLine} = this.props
     return (
       <>
         <Tab />
-        <SearchLine />
+        <SearchLine  changeSearchLine={changeSearchLine}/>
       </>
     );
   }
