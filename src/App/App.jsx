@@ -98,7 +98,8 @@ export default class App extends Component {
   };
 
   render() {
-    const { moviesData, loading, error, paginateValue, totalPages } = this.state;
+    const { moviesData, loading, error, paginateValue, totalPages } =
+      this.state;
     return (
       <>
         <Offline>
