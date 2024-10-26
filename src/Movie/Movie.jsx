@@ -9,7 +9,7 @@ export default class Movie extends Component {
   }
 
   render() {
-    const { title, score, data, description, rate, image } = this.props;
+    const { title, score, data, description, rating, image, senRatingId } = this.props;
     return (
       <>
         <div className="movie-container">
@@ -25,7 +25,7 @@ export default class Movie extends Component {
               <p className="movie-category">Drama</p>
             </div>
             <p className="movie-description">{description}</p>
-            <Rate allowHalf count={10} defaultValue={rate} />
+            <Rate allowHalf count={10} defaultValue={rating} onChange={senRatingId} allowClear={true}/>
           </div>
         </div>
       </>

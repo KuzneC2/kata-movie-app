@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs, theme } from 'antd';
 
 const arrayTab = ['Search', 'Rated'];
+
 const items = arrayTab.map((i, index) => {
   const id = String(index + 1);
   return {
@@ -9,10 +10,12 @@ const items = arrayTab.map((i, index) => {
     key: id,
   };
 });
-const Tab = () => {
+
+const Tab = ({ handleTabChange }) => {
   const {
-    token: { colorBgContainer, horizontalMargin },
+    token: { colorBgContainer },
   } = theme.useToken();
+
   const renderTabBar = (props, DefaultTabBar) => (
     <DefaultTabBar
       {...props}
@@ -21,6 +24,15 @@ const Tab = () => {
       }}
     />
   );
-  return <Tabs defaultActiveKey="1" renderTabBar={renderTabBar} items={items} />;
+
+  return (
+    <Tabs
+      defaultActiveKey="1"
+      renderTabBar={renderTabBar}
+      items={items}
+      onTabClick={(e) => handleTabChange(items[e - 1].label)}
+    />
+  );
 };
+
 export default Tab;

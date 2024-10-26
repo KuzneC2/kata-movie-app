@@ -7,11 +7,14 @@ export default class Header extends Component {
   constructor() {
     super();
   }
+
   render() {
+    const { changeSearchLine, handleTabChange, displayRated } = this.props;
+    const searchLine = !displayRated ? <SearchLine changeSearchLine={e => changeSearchLine(e)} /> : null;
     return (
       <>
-        <Tab />
-        <SearchLine />
+        <Tab handleTabChange={label => handleTabChange(label)} />
+        {searchLine}
       </>
     );
   }

@@ -1,9 +1,11 @@
 .movie-list {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 auto;
 }
-
+.movie-container-list{
+  display: flex;
+  flex-direction: column;
+}
 :where(.css-dev-only-do-not-override-1hpnbz2).ant-alert-error {
   background: #fff2f0;
   border: 1px solid #ffccc7;
