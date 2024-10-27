@@ -29,7 +29,6 @@
   margin: 10px 10px 0 0;
   max-width: 238px;
   width: 100%;
-  
 }
 
 .movie-title {
@@ -50,6 +49,19 @@
   justify-content: center;
 }
 
+.movie-score-red {
+  border-color: #e90000;
+}
+.movie-score-orange {
+  border-color: #e97e00;
+}
+.movie-score-yellow {
+  border-color: #e9d100;
+}
+.movie-score-green {
+  border-color: #66e900;
+}
+
 .movie-date {
   font-family: 'Inter';
   font-style: normal;
@@ -63,10 +75,11 @@
 .movie-category-container {
   display: flex;
   margin: 0 0 7px 0;
+  flex-wrap: wrap;
 }
 
 .movie-category {
-  margin: 0 8px 0 0;
+  margin: 0 8px 5px 0;
   padding: 2px 3px 3px 5px;
   background-color: #fafafa;
   border: 1px solid #d9d9d9;

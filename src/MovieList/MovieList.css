@@ -17,3 +17,7 @@
 :where(.css-dev-only-do-not-override-1hpnbz2).ant-spin-spinning {
   margin-bottom: 15px;
 }
+
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-pagination-center{
+  padding-top: 10px;
+}

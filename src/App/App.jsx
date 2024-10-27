@@ -6,7 +6,6 @@ import { debounce } from 'lodash';
 import { Alert } from 'antd';
 import Header from '../Header/Header';
 import MovieList from '../MovieList/MovieList';
-
 import movieServiceApi from '../services/movies-servies';
 
 import './App.css';
@@ -45,7 +44,7 @@ export default class App extends Component {
     } else {
       const moviesData = api.results.map(movie => {
         const movieRated = this.state.movieDataRated.find(el => el.id == movie.id);
-        return{
+        return {
           id: movie.id,
           title: movie.original_title,
           score: movie.vote_average.toFixed(1),
@@ -53,6 +52,7 @@ export default class App extends Component {
           description: this.cutDescription(movie.overview, 90),
           rating: movieRated ? movieRated.rating : undefined,
           image: this.getCurImg(movie.poster_path),
+          genres: movie.genre_ids,
         };
       });
 
@@ -65,19 +65,6 @@ export default class App extends Component {
       });
     }
   };
-
-  //Отоброжение звёзд рейтинга при запуске
-
-  // getRaitingStart = async movie => {
-
-  //   if (movie.rate == undefined) {
-  //     const rate = this.getStartRateApi().find(el => el.id == movie.id)
-  //     console.log(rate)
-  //     return undefined
-  //   } else {
-  //     return undefined;
-  //   }
-  // };
 
   //получение корректного изображения, если есть
   getCurImg = url => {
@@ -117,8 +104,7 @@ export default class App extends Component {
   };
 
   //рендер ошибки
-  getErrorMessage = err => {
-    console.log(err);
+  getErrorMessage = () => {
     this.setState({
       error: true,
       loading: false,
@@ -147,12 +133,15 @@ export default class App extends Component {
   //получение стартового апи прорейтингированных фильмов
 
   getStartRateApi = async () => {
-    const apiRated = await this.movieService.getRatedMovieList();
+    const apiRated = await this.movieService.getRatedMovieList().catch(this.getErrorMessage);
     if (apiRated == null) {
       return await this.setState({
+        movieDataRated: [],
         loading: false,
+        totalPages: 0
       });
     } else {
+      const totalPagesRated = await apiRated.total_pages;
       const movieDataRated = await apiRated.results.map(movie => {
         return {
           id: movie.id,
@@ -162,32 +151,34 @@ export default class App extends Component {
           description: this.cutDescription(movie.overview, 90),
           rating: movie.rating,
           image: this.getCurImg(movie.poster_path),
+          genres: movie.genre_ids,
         };
       });
       return await this.setState({
         movieDataRated: movieDataRated,
         loading: false,
+        totalPages: totalPagesRated,
       });
     }
   };
 
   // изменение таблиста
   handleTabChange = async label => {
-    await this.getStartRateApi();
     if (label == 'Rated') {
       await this.setState({
         displayRated: true,
         loading: true,
       });
+      await this.getStartRateApi();
     }
     if (label == 'Search') {
+      await this.getStartRateApi();
       await this.setState({
         displayRated: false,
         loading: true,
       });
+      await this.getStartApi();
     }
-    await this.getStartApi();
-    console.log(this.state);
   };
 
   // первоначальный рендер стартовых фильмов
@@ -200,12 +191,8 @@ export default class App extends Component {
       await this.movieService.createGuestSession(); //Создание новой гостевой сессии
     }
 
-    const apiRated = await this.movieService.getRatedMovieList();
-    if (apiRated == null) {
-      this.setState({
-        loading: false,
-      });
-    } else {
+    const apiRated = await this.movieService.getRatedMovieList().catch(this.getErrorMessage);
+    if (apiRated) {
       const movieDataRated = apiRated.results.map(movie => {
         return {
           id: movie.id,
@@ -223,9 +210,7 @@ export default class App extends Component {
         loading: false,
       });
     }
-
     this.getStartApi().catch(this.getErrorMessage); //стартовый рендер фильмов на странице
-    console.log(this.state);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -235,7 +220,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { moviesData, loading, error, paginateValue, totalPages, movieDataRated, displayRated } = this.state;
+    const { moviesData, loading, error, paginateValue, totalPages, movieDataRated, displayRated, genres } = this.state;
     return (
       <>
         <Offline>
@@ -259,6 +244,7 @@ export default class App extends Component {
               totalPages={totalPages}
               changeNumberPage={this.changeNumberPage}
               senRatingId={this.movieService.sendRating}
+              genres={genres}
             />
           </main>
         </Online>

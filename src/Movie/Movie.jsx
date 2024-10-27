@@ -8,8 +8,32 @@ export default class Movie extends Component {
     super();
   }
 
+  renderColorScore = score => {
+    let color;
+    if (score > 7) {
+      color = 'movie-score movie-score-green';
+    } else if (score >= 5 && score <= 7) {
+      color = 'movie-score movie-score-yellow';
+    } else if (score >= 3 && score < 5) {
+      color = 'movie-score movie-score-orange';
+    } else if (score < 3) {
+      color = 'movie-score movie-score-red';
+    }
+    return color;
+  };
+
   render() {
-    const { title, score, data, description, rating, image, senRatingId } = this.props;
+    const { title, score, data, description, rating, image, senRatingId, genres, genresArr } = this.props;
+
+    const arrGenreFinish = genresArr.filter(genre => genres.includes(genre.id));
+
+    const genresComponent = arrGenreFinish.map((el, index) => {
+      return (
+        <p key={index} className="movie-category">
+          {el.name}
+        </p>
+      );
+    });
     return (
       <>
         <div className="movie-container">
@@ -17,15 +41,12 @@ export default class Movie extends Component {
           <div className="movie-description-content">
             <div className="movie-title-block">
               <h2 className="movie-title">{title}</h2>
-              <div className="movie-score">{score}</div>
+              <div className={this.renderColorScore(score)}>{score}</div>
             </div>
             <h3 className="movie-date">{data}</h3>
-            <div className="movie-category-container">
-              <p className="movie-category">Action</p>
-              <p className="movie-category">Drama</p>
-            </div>
+            <div className="movie-category-container">{genresComponent}</div>
             <p className="movie-description">{description}</p>
-            <Rate allowHalf count={10} defaultValue={rating} onChange={senRatingId} allowClear={true}/>
+            <Rate allowHalf count={10} defaultValue={rating} onChange={senRatingId} allowClear={true} />
           </div>
         </div>
       </>

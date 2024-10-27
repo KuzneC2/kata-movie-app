@@ -17,13 +17,12 @@ export default class movieServiceApi {
       this._options,
     );
     if (!res.ok) {
-      console.log(res.err);
       throw new Error(`Ошибочка< что-то не так с ${this._url}` + `код ошибки: ${res.status}`);
+    } else {
+      const body = await res.json();
+      console.log(body);
+      return body;
     }
-
-    const body = await res.json();
-    console.log(body);
-    return body;
   }
   //Создание гостевого сеанса
   createGuestSession = async () => {
@@ -50,28 +49,44 @@ export default class movieServiceApi {
 
   // получение фильмов
   getRatedMovieList = async () => {
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiOTcyNjA1OWM2NTFmZjRlYzdmODAyMmY2NTUyMWZiYSIsIm5iZiI6MTcyOTg2MzI5My40MTAyNDcsInN1YiI6IjY3MTUwZWU0YzZlMzA0MDk2MTk2NDkwYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.SVl6ku5AdnKUPVSJGlUi01AyHJjzVFoQtZZGPgI-FDA',
-      },
-    };
-    // console.log(localStorage.getItem('guestSessionId'));
-    const result = await fetch(
-      `${this._url}/guest_session/${localStorage.getItem('guestSessionId')}/rated/movies?${this._apiKey}&page=1`,
-      options,
-    );
-    if (result.ok) {
-      return result.json();
-    } else {
+    try {
+      const res = await fetch(
+        `${this._url}/guest_session/${localStorage.getItem('guestSessionId')}/rated/movies?${this._apiKey}&page=1`,
+        this._options,
+      );
+      if (!res.ok) {
+        throw new Error(`Ошибочка< что-то не так с ${this._url}` + `код ошибки: ${res.status}`);
+      }
+      return res.json();
+    } catch (err) {
       return null;
     }
   };
 
   //отправка рейтинга
-  sendRating = async (rating, id) => {
+
+  getGenreMovies = async () => {
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiOTcyNjA1OWM2NTFmZjRlYzdmODAyMmY2NTUyMWZiYSIsIm5iZiI6MTcyOTQzMzg5NS4yMTIwODYsInN1YiI6IjY3MTUwZWU0YzZlMzA0MDk2MTk2NDkwYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.n11zOBzj1JoAGaRdBhU6kHK8TU98lI4WvWe0V0LQhDU',
+      },
+    };
+    const res = await fetch(
+      `https://api.themoviedb.org/3/genre/movie/list?language=en&api_key=b9726059c651ff4ec7f8022f65521fba`,
+      options,
+    );
+    if (!res.ok) {
+      console.log('Ошибка');
+      throw new Error(`Ошибочка< что-то не так с ${this._url}` + `код ошибки: ${res.status}`);
+    } else {
+      return await res.json();
+    }
+  };
+
+  getRating = async (rating, id) => {
     const options = {
       method: 'POST',
       headers: {
@@ -91,5 +106,33 @@ export default class movieServiceApi {
       .then(res => res.json())
       .then(res => console.log(res))
       .catch(err => console.error(err));
+  };
+
+  deleteRaiting = id => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiOTcyNjA1OWM2NTFmZjRlYzdmODAyMmY2NTUyMWZiYSIsIm5iZiI6MTczMDAzNjc0MC41NTQ5MjUsInN1YiI6IjY3MTUwZWU0YzZlMzA0MDk2MTk2NDkwYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Bdj-xZQN__V-Hq5KqJQJhLscoM6YIv8Xtb3TBwmXkgg',
+      },
+    };
+
+    fetch(
+      `https://api.themoviedb.org/3/movie/${id}/rating?${this._apiKey}&guest_session_id=${localStorage.getItem('guestSessionId')}`,
+      options,
+    )
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
+  };
+
+  sendRating = async (rating, id) => {
+    if (rating == 0) {
+      return this.deleteRaiting(id);
+    } else {
+      return this.getRating(rating, id);
+    }
   };
 }

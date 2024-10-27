@@ -1,15 +1,29 @@
 import { Component } from 'react';
 import Movie from '../Movie/Movie';
 import { Alert, Pagination, Spin } from 'antd';
-
+import movieServiceApi from '../services/movies-servies';
 import './MovieList.css';
 
 export default class MovieList extends Component {
   constructor() {
     super();
+    this.state = {
+      genresArr: [],
+    };
   }
-  onClose = e => {
-    console.log(e, 'I was closed.');
+  movieService = new movieServiceApi();
+
+  getGenreMovies = async () => {
+    const res = await this.movieService.getGenreMovies().catch(this.getErrorMessage);
+    console.log(res.genres);
+    await this.setState({
+      genresArr: res.genres,
+    });
+    return res;
+  };
+
+  componentDidMount = async () => {
+    await this.getGenreMovies();
   };
   render() {
     const {
@@ -34,6 +48,8 @@ export default class MovieList extends Component {
         rating={movie.rating}
         image={movie.image}
         senRatingId={rating => senRatingId(rating, movie.id)}
+        genres={movie.genres}
+        genresArr={this.state.genresArr}
       />
     ));
 
@@ -47,6 +63,8 @@ export default class MovieList extends Component {
         rating={movie.rating}
         image={movie.image}
         senRatingId={rating => senRatingId(rating, movie.id)}
+        genres={movie.genres}
+        genresArr={this.state.genresArr}
       />
     ));
 
@@ -55,8 +73,6 @@ export default class MovieList extends Component {
 
     const moviesComponentContent = !displayRated ? movieDataList : movieDataRatedList;
     const moviesComponent = !loading ? moviesComponentContent : null;
-    
-    
 
     return (
       <>
