@@ -1,4 +1,4 @@
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-pagination-center {
+.ant-pagination-center {
   padding: 0 0 17px 0;
 }
 
@@ -8,7 +8,7 @@
   align-items: center;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-alert-warning {
+.ant-alert-warning {
   position: absolute;
   min-width: 500px;
   left: 29.5%;
@@ -16,33 +16,26 @@
   text-align: center;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-tabs > .ant-tabs-nav,
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-tabs > div > .ant-tabs-nav {
+.ant-tabs > .ant-tabs-nav,
+.ant-tabs > div > .ant-tabs-nav {
   max-width: 146px;
   margin: 0 auto;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-tabs
-  > .ant-tabs-nav
-  .ant-tabs-nav-list {
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
   width: 146px;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-tabs .ant-tabs-tab-btn {
+.ant-tabs .ant-tabs-tab-btn {
   width: 64px;
   text-align: center;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-tabs
-  .ant-tabs-tab
-  + .ant-tabs-tab {
+.ant-tabs .ant-tabs-tab + .ant-tabs-tab {
   margin: 0 0 0 16px;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-tabs-top
-  > .ant-tabs-nav::before,
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-tabs-top
-  > div
-  > .ant-tabs-nav::before {
+.ant-tabs-top > .ant-tabs-nav::before,
+.ant-tabs-top > div > .ant-tabs-nav::before {
   max-width: 144px;
 }

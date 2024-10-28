@@ -19,6 +19,3 @@ code {
   font-size: 16px;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-rate {
-  margin: 0 15px 0 0;
-}

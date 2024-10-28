@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
 }
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-alert-error {
+.ant-alert-error {
   background: #fff2f0;
   border: 1px solid #ffccc7;
   margin: 15px 0 40px 0;
@@ -21,10 +21,10 @@
   text-align: center;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-spin-spinning {
+.ant-spin-spinning {
   margin-bottom: 15px;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-pagination-center {
+.ant-pagination-center {
   padding-top: 10px;
 }
