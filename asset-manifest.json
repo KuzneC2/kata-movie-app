@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/kata-movie-app/static/css/main.25c84cc2.css",
-    "main.js": "/kata-movie-app/static/js/main.02cb536c.js",
+    "main.css": "/kata-movie-app/static/css/main.fd2dc01f.css",
+    "main.js": "/kata-movie-app/static/js/main.f53c6604.js",
     "index.html": "/kata-movie-app/index.html",
-    "main.25c84cc2.css.map": "/kata-movie-app/static/css/main.25c84cc2.css.map",
-    "main.02cb536c.js.map": "/kata-movie-app/static/js/main.02cb536c.js.map"
+    "main.fd2dc01f.css.map": "/kata-movie-app/static/css/main.fd2dc01f.css.map",
+    "main.f53c6604.js.map": "/kata-movie-app/static/js/main.f53c6604.js.map"
   },
   "entrypoints": [
-    "static/css/main.25c84cc2.css",
-    "static/js/main.02cb536c.js"
+    "static/css/main.fd2dc01f.css",
+    "static/js/main.f53c6604.js"
   ]
 }
