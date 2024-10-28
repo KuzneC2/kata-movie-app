@@ -24,6 +24,11 @@
   }
 }
 
+@media (max-width: 860px) {
+  .movie-container {
+    margin: 0 0 20px 0;
+  }
+}
 .movie-img {
   max-width: 183px;
   max-height: 281px;
