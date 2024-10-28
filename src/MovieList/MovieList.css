@@ -1,15 +1,22 @@
 .movie-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
-.movie-container-list{
+
+@media (max-width: 860px) {
+  .movie-list {
+    flex-direction: column;
+  }
+}
+.movie-container-list {
   display: flex;
   flex-direction: column;
 }
 :where(.css-dev-only-do-not-override-1hpnbz2).ant-alert-error {
   background: #fff2f0;
   border: 1px solid #ffccc7;
-  margin: 0 0 40px 0;
+  margin: 15px 0 40px 0;
   width: 340px;
   text-align: center;
 }
@@ -18,6 +25,6 @@
   margin-bottom: 15px;
 }
 
-:where(.css-dev-only-do-not-override-1hpnbz2).ant-pagination-center{
+:where(.css-dev-only-do-not-override-1hpnbz2).ant-pagination-center {
   padding-top: 10px;
 }

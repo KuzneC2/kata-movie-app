@@ -32,7 +32,7 @@ export default class App extends Component {
   getStartApi = async () => {
     const api = await this.movieService.getResource(this.state.searchName, this.state.paginateValue);
 
-    if (api.total_results < 1) {
+    if (api == null) {
       this.setState({
         loading: false,
         error: true,
@@ -138,7 +138,7 @@ export default class App extends Component {
       return await this.setState({
         movieDataRated: [],
         loading: false,
-        totalPages: 0
+        totalPages: 0,
       });
     } else {
       const totalPagesRated = await apiRated.total_pages;
@@ -164,22 +164,27 @@ export default class App extends Component {
 
   // изменение таблиста
   handleTabChange = async label => {
-    if (label == 'Rated') {
+    await this.getStartRateApi();
+    await this.setState({
+      loading: true,
+    });
+
+    if (label === 'Rated') {
       await this.setState({
         displayRated: true,
-        loading: true,
       });
       await this.getStartRateApi();
     }
-    if (label == 'Search') {
-      await this.getStartRateApi();
+
+    if (label === 'Search') {
+      await this.getStartApi();
       await this.setState({
         displayRated: false,
-        loading: true,
       });
-      await this.getStartApi();
     }
   };
+
+  
 
   // первоначальный рендер стартовых фильмов
   async componentDidMount() {
