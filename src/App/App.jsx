@@ -23,6 +23,7 @@ export default class App extends Component {
       totalPages: 1,
       searchName: `return`,
       totalResults: 0,
+      paginateValueRated: 1,
     };
   }
 
@@ -31,7 +32,6 @@ export default class App extends Component {
   //Создание стейта всех фильмов для отрисовки
   getStartApi = async () => {
     const api = await this.movieService.getResource(this.state.searchName, this.state.paginateValue);
-
     if (api == null) {
       this.setState({
         loading: false,
@@ -43,14 +43,13 @@ export default class App extends Component {
       });
     } else {
       const moviesData = api.results.map(movie => {
-        const movieRated = this.state.movieDataRated.find(el => el.id == movie.id);
         return {
           id: movie.id,
           title: movie.original_title,
           score: movie.vote_average.toFixed(1),
           data: this.getCurDate(movie.release_date),
           description: this.cutDescription(movie.overview, 90),
-          rating: movieRated ? movieRated.rating : undefined,
+          rating: localStorage.getItem(`${movie.id}`) == null ? undefined : `${localStorage.getItem(`${movie.id}`)}`,
           image: this.getCurImg(movie.poster_path),
           genres: movie.genre_ids,
         };
@@ -113,11 +112,21 @@ export default class App extends Component {
 
   //изменение страницы
   changeNumberPage = async num => {
-    await this.setState({
-      loading: true,
-      paginateValue: num,
-    });
-    return await this.getStartApi();
+    if (this.state.displayRated) {
+      await this.setState({
+        loading: true,
+        paginateValueRated: num,
+      });
+      console.log('Стейт рейтингованых обновился. Страница перелестнулась на ', num);
+      return await this.getStartRateApi();
+    } else if (!this.state.displayRated) {
+      await this.setState({
+        loading: true,
+        paginateValue: num,
+      });
+      console.log('Стейт Всех обновился. Страница перелестнулась на ', num);
+      return await this.getStartApi();
+    }
   };
 
   //изменение в инпуте поиска + debounce
@@ -133,7 +142,7 @@ export default class App extends Component {
   //получение стартового апи прорейтингированных фильмов
 
   getStartRateApi = async () => {
-    const apiRated = await this.movieService.getRatedMovieList().catch(this.getErrorMessage);
+    const apiRated = await this.movieService.getRatedMovieList(this.state.paginateValueRated).catch(this.getErrorMessage);
     if (apiRated == null) {
       return await this.setState({
         movieDataRated: [],
@@ -164,7 +173,7 @@ export default class App extends Component {
 
   // изменение таблиста
   handleTabChange = async label => {
-    await this.getStartRateApi();
+    // await this.getStartRateApi();
     await this.setState({
       loading: true,
     });
@@ -172,19 +181,19 @@ export default class App extends Component {
     if (label === 'Rated') {
       await this.setState({
         displayRated: true,
+        paginateValueRated: 1,
       });
       await this.getStartRateApi();
     }
 
     if (label === 'Search') {
-      await this.getStartApi();
       await this.setState({
         displayRated: false,
       });
+      console.log(this.state.paginateValue)
+      await this.getStartApi();
     }
   };
-
-  
 
   // первоначальный рендер стартовых фильмов
   async componentDidMount() {
@@ -196,25 +205,25 @@ export default class App extends Component {
       await this.movieService.createGuestSession(); //Создание новой гостевой сессии
     }
 
-    const apiRated = await this.movieService.getRatedMovieList().catch(this.getErrorMessage);
-    if (apiRated) {
-      const movieDataRated = apiRated.results.map(movie => {
-        return {
-          id: movie.id,
-          title: movie.original_title,
-          score: movie.vote_average.toFixed(1),
-          data: this.getCurDate(movie.release_date),
-          description: this.cutDescription(movie.overview, 90),
-          rating: movie.rating,
-          image: this.getCurImg(movie.poster_path),
-        };
-      });
+    // const apiRated = await this.movieService.getRatedMovieList().catch(this.getErrorMessage);
+    // if (apiRated) {
+    //   const movieDataRated = apiRated.results.map(movie => {
+    //     return {
+    //       id: movie.id,
+    //       title: movie.original_title,
+    //       score: movie.vote_average.toFixed(1),
+    //       data: this.getCurDate(movie.release_date),
+    //       description: this.cutDescription(movie.overview, 90),
+    //       rating: movie.rating,
+    //       image: this.getCurImg(movie.poster_path),
+    //     };
+    //   });
 
-      this.setState({
-        movieDataRated: movieDataRated,
-        loading: false,
-      });
-    }
+    //   this.setState({
+    //     movieDataRated: movieDataRated,
+    //     loading: false,
+    //   });
+    // }
     this.getStartApi().catch(this.getErrorMessage); //стартовый рендер фильмов на странице
   }
 
@@ -223,9 +232,17 @@ export default class App extends Component {
       this.getStartApi();
     }
   }
+  sendRating = async (rating, id) => {
+    localStorage.setItem(`${id}`, rating);
+    if (rating == 0) {
+      return this.movieService.deleteRaiting(id);
+    } else {
+      return this.movieService.getRating(rating, id);
+    }
+  };
 
   render() {
-    const { moviesData, loading, error, paginateValue, totalPages, movieDataRated, displayRated, genres } = this.state;
+    const { paginateValueRated, moviesData, loading, error, paginateValue, totalPages, movieDataRated, displayRated, genres } = this.state;
     return (
       <>
         <Offline>
@@ -245,11 +262,12 @@ export default class App extends Component {
               movieDataRated={movieDataRated}
               loading={loading}
               error={error}
-              paginate={paginateValue}
+              paginateValue={paginateValue}
               totalPages={totalPages}
               changeNumberPage={this.changeNumberPage}
-              senRatingId={this.movieService.sendRating}
+              senRatingId={this.sendRating}
               genres={genres}
+              paginateValueRated={paginateValueRated}
             />
           </main>
         </Online>

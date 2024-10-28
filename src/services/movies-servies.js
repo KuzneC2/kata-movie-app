@@ -52,10 +52,10 @@ export default class movieServiceApi {
   };
 
   // получение фильмов
-  getRatedMovieList = async () => {
+  getRatedMovieList = async (page) => {
     try {
       const res = await fetch(
-        `${this._url}/guest_session/${localStorage.getItem('guestSessionId')}/rated/movies?${this._apiKey}&page=1`,
+        `${this._url}/guest_session/${localStorage.getItem('guestSessionId')}/rated/movies?${this._apiKey}&page=${page}`,
         this._options,
       );
       if (!res.ok) {
@@ -136,11 +136,5 @@ export default class movieServiceApi {
       .catch(err => console.error(err));
   };
 
-  sendRating = async (rating, id) => {
-    if (rating == 0) {
-      return this.deleteRaiting(id);
-    } else {
-      return this.getRating(rating, id);
-    }
-  };
+  
 }

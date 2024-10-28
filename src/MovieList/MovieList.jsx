@@ -17,6 +17,7 @@ const MovieList = props => {
     senRatingId,
     movieDataRated,
     displayRated,
+    paginateValueRated,
   } = props;
 
   const movieDataList = moviesData.map(movie => (
@@ -55,6 +56,28 @@ const MovieList = props => {
   const moviesComponentContent = !displayRated ? movieDataList : movieDataRatedList;
   const moviesComponent = !loading ? moviesComponentContent : null;
 
+  const pagination = displayRated ? (
+    <Pagination
+      key={'displayRated'}
+      align="center"
+      сurrent={paginateValueRated}
+      total={totalPages * 10}
+      defaultCurrent={1}
+      onChange={num => changeNumberPage(num)}
+      showSizeChanger={false}
+    />
+  ) : (
+    <Pagination
+      key={'displayNotRated'}
+      align="center"
+      defaultCurrent={paginateValue}
+      сurrent={paginateValue}
+      total={totalPages * 10}
+      onChange={num => changeNumberPage(num)}
+      showSizeChanger={false}
+    />
+  );
+
   return (
     <>
       <GenreProvider>
@@ -62,14 +85,7 @@ const MovieList = props => {
         <div className="movie-container-list">
           {errorMessage}
           {loadComponent}
-          <Pagination
-            align="center"
-            defaultCurrent={1}
-            сurrent={paginateValue}
-            total={`${totalPages}0`}
-            onChange={num => changeNumberPage(num)}
-            showSizeChanger={false}
-          />
+          {pagination}
         </div>
       </GenreProvider>
     </>

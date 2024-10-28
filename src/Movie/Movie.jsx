@@ -52,7 +52,8 @@ const Movie = (props) => {
 
 
         <p className="movie-description">{description}</p>
-        <Rate allowHalf count={10} defaultValue={rating} onChange={senRatingId} allowClear={true} />
+        {/* <Rate count={10} defaultValue={rating} onChange={senRatingId} allowClear={true} allowHalf/> */}
+        <Rate allowHalf defaultValue={Number(rating)} count={10} onChange={senRatingId} />
       </div>
     </div>
   );
